@@ -1,0 +1,495 @@
+@import "../../vendor/npm-asset/bootstrap/scss/functions";
+@import "../../vendor/npm-asset/bootstrap/scss/mixins";
+@import "../../vendor/npm-asset/bootstrap/scss/variables";
+@import "../../vendor/npm-asset/bootstrap/scss/utilities";
+
+$enable-transitions: true !default;
+$enable-prefers-reduced-motion-media-query: false !default;
+
+$bucket-width: 300px !default;
+$bucket-max-height: 370px !default;
+$kanban-board-image-min-width: 150px !default;
+$user-image-size: 32px !default;
+
+$nav-border-width: 2px !default;
+$nav-link-hover-border-color: #343a40 !default;
+$nav-link-disabled-color: #6c757d !default;
+$nav-link-active-color: #343a40 !default;
+$nav-link-active-border-color: #343a40 !default;
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px
+) !default;
+
+$visual-colors: #007BFF, #6610F2, #6F42C1, #E83E8C, #DC3545, #FD7E14, #FFC107, #28A745, #20C997, #17A2B8 !default;
+
+.pb-6 {
+    padding-bottom: 3.5rem;
+}
+
+h1, h2, h3, .h1, .h2, .h3 {
+    &.dropdown-toggle::after {
+        font-size: 80%;
+    }
+}
+
+.kanban-top-scrollbar {
+    height: 20px;
+
+    > div {
+        height: 1px;
+        overflow-y: hidden;
+    }
+}
+
+.kanban-bottom-scrollbar {
+    @media (max-width: map-get($grid-breakpoints, md) - 1) {
+        position: relative;
+    }
+}
+.kanban-top-scrollbar, .kanban-bottom-scrollbar {
+    @media (min-width: map-get($grid-breakpoints, md)) {
+        width: 100%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+
+        > div {
+            min-height: 1px;
+        }
+    }
+    @media (max-width: map-get($grid-breakpoints, md) - 1) {
+        overflow-x: hidden;
+    }
+}
+
+.kanban-button-next, .kanban-button-prev {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    position: absolute;
+    top: 0;
+}
+
+.kanban-button-prev {
+    left: 10vw;
+}
+
+.kanban-button-next {
+    right: 10vw;
+}
+
+.kanban-boards {
+    display: grid;
+    grid: {
+        auto-columns: max-content;
+        auto-flow: row;
+        auto-rows: max-content;
+        column-gap: 1rem;
+        row-gap: .5rem;
+        template-columns: 1fr;
+    }
+
+    @media (min-width: map-get($grid-breakpoints, md)) {
+        grid-template-columns: 1fr 1fr;
+    }
+    @media (min-width: map-get($grid-breakpoints, xl)) {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.kanban-board {
+    @include transition(all .2s ease-in-out);
+
+    max-height: 150px;
+    width: 100%;
+
+    .kanban-board-image > img {
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        width: 100%;
+    }
+
+    &:hover {
+        border-color: var(--dark);
+    }
+}
+
+.kanban-board-inner {
+    background-color: var(--white);
+    display: flex;
+    height: 100%;
+    max-height: 150px;
+}
+
+.kanban-board-image {
+    min-width: $kanban-board-image-min-width;
+
+    .kanban-visualisation {
+        align-items: center;
+        color: var(--white);
+        display: flex;
+        font-size: 1.25rem;
+        font-weight: bold;
+        height: 100%;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+
+        @for $i from 1 through 10 {
+            &.modulo-#{$i} {
+                background-color: nth($visual-colors, $i);
+            }
+        }
+    }
+    > img {
+        max-height: 150px;
+        padding: 1rem;
+    }
+}
+
+.kanban-board-meta {
+    background-color: $white;
+    flex-grow: 1;
+    padding: 1rem
+}
+
+.kanban-create-mobile {
+    bottom: 0;
+    position: absolute;
+    right: 0;
+
+    > .fa-plus {
+        display: block;
+        height: 1.5rem;
+        line-height: 1.5;
+        text-align: center;
+        width: 1.5rem;
+    }
+}
+
+.kanban-bucket {
+    max-width: 100%;
+    position: relative;
+    width: $bucket-width;
+}
+
+.kanban-bucket-more > .btn, .kanban-bucket-sort-handle {
+    @include transition(opacity .2s ease-in-out);
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    opacity: 0;
+
+    &:focus {
+        opacity: 1;
+    }
+
+    @media (max-width: map-get($grid-breakpoints, md) - 1px) {
+        opacity: 1;
+    }
+}
+
+.kanban-bucket-sort-handle {
+    cursor: move;
+}
+
+.kanban-bucket-header {
+    &:hover {
+        .kanban-bucket-more > .btn, .kanban-bucket-sort-handle {
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: map-get($grid-breakpoints, md) - 1) {
+        > h1, > h2, > h3, > h4, > h5, > .h1, > .h2, > .h3, > .h4, > .h5 {
+            max-width: 50vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+.kanban-user {
+    display: block;
+    min-height: $user-image-size;
+
+    > img {
+        height: $user-image-size;
+        object-fit: cover;
+        object-position: center;
+        width: $user-image-size;
+    }
+
+    > .kanban-visualisation {
+        background-color: var(--gray);
+        border-radius: 50%;
+        color: var(--white);
+        display: inline-block;
+        font-size: 1rem;
+        font-weight: normal;
+        height: $user-image-size;
+        line-height: $user-image-size;
+        text-align: center;
+        width: $user-image-size;
+    }
+}
+
+.kanban-user-more {
+    line-height: $user-image-size;
+}
+
+#createTaskForm, #taskModalForm {
+    .kanban-task-assignees {
+        .dropdown {
+            .dropdown-toggle {
+                background-color: transparent;
+                min-height: -webkit-calc(#{$user-image-size} + 1rem);
+                min-height: -moz-calc(#{$user-image-size} + 1rem);
+                min-height: calc(#{$user-image-size} + 1rem);
+                padding-left: -webkit-calc(1rem + #{$user-image-size});
+                padding-left: -moz-calc(1rem + #{$user-image-size});
+                padding-left: calc(1rem + #{$user-image-size});
+
+                &:hover {
+                    background-color: transparent;
+
+                    &::after {
+                        background-color: var(--light);
+                    }
+                }
+
+                &::after {
+                    @include transition(background-color .2s ease-in-out);
+
+                    background-size: $user-image-size * .75;
+                    border-radius: 50%;
+                    height: -webkit-calc(#{$user-image-size} + .5rem);
+                    height: -moz-calc(#{$user-image-size} + .5rem);
+                    height: calc(#{$user-image-size} + .5rem);
+                    left: 0;
+                    margin-left: 0;
+                    opacity: 1;
+                    padding: .5rem;
+                    position: absolute;
+                    top: .25rem;
+                    width: -webkit-calc(#{$user-image-size} + .5rem);
+                    width: -moz-calc(#{$user-image-size} + .5rem);
+                    width: calc(#{$user-image-size} + .5rem);
+                }
+            }
+        }
+    }
+
+    .file-drop-zone .file-preview-thumbnails {
+        &::after {
+            clear: both;
+            content: "";
+            display: table;
+            height: 0;
+            width: 0;
+        }
+    }
+}
+
+.kanban-task-assignees, .card-footer.kanban-task-assignees, .kanban-plan-assignees {
+    background: none transparent;
+    padding: 0;
+
+    .dropdown {
+        .dropdown-toggle {
+            padding: .5rem .75rem;
+
+            &:hover::after {
+                opacity: 1;
+            }
+
+            &::after {
+                @include transition(opacity .2s ease-in-out);
+
+                background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik02MjQgMjA4aC02NHYtNjRjMC04LjgtNy4yLTE2LTE2LTE2aC0zMmMtOC44IDAtMTYgNy4yLTE2IDE2djY0aC02NGMtOC44IDAtMTYgNy4yLTE2IDE2djMyYzAgOC44IDcuMiAxNiAxNiAxNmg2NHY2NGMwIDguOCA3LjIgMTYgMTYgMTZoMzJjOC44IDAgMTYtNy4yIDE2LTE2di02NGg2NGM4LjggMCAxNi03LjIgMTYtMTZ2LTMyYzAtOC44LTcuMi0xNi0xNi0xNnptLTQwMCA0OGM3MC43IDAgMTI4LTU3LjMgMTI4LTEyOFMyOTQuNyAwIDIyNCAwIDk2IDU3LjMgOTYgMTI4czU3LjMgMTI4IDEyOCAxMjh6bTg5LjYgMzJoLTE2LjdjLTIyLjIgMTAuMi00Ni45IDE2LTcyLjkgMTZzLTUwLjYtNS44LTcyLjktMTZoLTE2LjdDNjAuMiAyODggMCAzNDguMiAwIDQyMi40VjQ2NGMwIDI2LjUgMjEuNSA0OCA0OCA0OGgzNTJjMjYuNSAwIDQ4LTIxLjUgNDgtNDh2LTQxLjZjMC03NC4yLTYwLjItMTM0LjQtMTM0LjQtMTM0LjR6Ij48L3BhdGg+PC9zdmc+') no-repeat center;
+                background-size: 75%;
+                border: 0 none transparent;
+                content: "";
+                height: $user-image-size;
+                margin-left: auto;
+                opacity: 0;
+                width: $user-image-size;
+
+                @media (max-width: map-get($grid-breakpoints, md) - 1) {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .dropdown-menu {
+            max-height: $bucket-max-height;
+            min-width: $bucket-width;
+            overflow-y: auto;
+        }
+    }
+}
+
+.kanban-task-assignees {
+    .dropdown {
+        .dropdown-toggle {
+            @include transition(background-color .2s ease-in-out);
+
+            background-color: var(--white);
+
+            &:hover {
+                background-color: var(--light);
+            }
+        }
+    }
+}
+
+.kanban-task {
+    cursor: pointer;
+
+    &.status-done, &.status-0 {
+        background-color: var(--light);
+        text-decoration: line-through;
+
+        .kanban-task-done-link {
+            display: none !important;
+        }
+    }
+
+    &:hover {
+        .kanban-task-done-link {
+            opacity: 1;
+        }
+    }
+
+    .kanban-task-content {
+        padding: .5rem .75rem;
+    }
+}
+
+.kanban-task-checklist-element {
+    .kanban-task-checklist-sort {
+        cursor: grab;
+    }
+
+    .picker-trigger {
+        max-width: 25%;
+    }
+
+    @media (max-width: map-get($grid-breakpoints, sm) - 1) {
+        .picker-trigger {
+            max-width: 33.33333333%;
+        }
+    }
+}
+
+.kanban-task-checkbox {
+    &, label {
+        cursor: pointer;
+    }
+
+    &:hover {
+        label {
+            &::before {
+                background-color: var(--light);
+            }
+
+            text-decoration: underline;
+        }
+    }
+}
+
+.kanban-task-done-link {
+    @include transition(opacity .2s ease-in-out, background-color .2s ease-in-out, color .2s ease-in-out);
+
+    color: inherit;
+    opacity: 0;
+
+    &:hover {
+        color: var(--success);
+    }
+}
+
+.kanban-task-comment {
+    font-size: .75rem;
+
+    p {
+        margin-bottom: .75rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.kanban-task-attachments {
+    .kanban-attachment-show .custom-control-label {
+        @include transition(opacity .2s ease-in-out);
+
+        opacity: 0;
+    }
+
+    .list-group-item:hover .kanban-attachment-show .custom-control-label,
+    .custom-control-input:checked + .custom-control-label {
+        opacity: 1;
+    }
+}
+
+.kanban-assignees {
+    .add-assignee {
+        display: flex !important;
+
+        &.is-assigned {
+            display: none !important;
+        }
+
+        &[style="display: none;"] {
+            display: none !important;
+        }
+    }
+
+    .remove-assignee {
+        display: none !important;
+
+        &.is-assigned {
+            display: flex !important;
+
+            &[style="display: none;"] {
+                display: none !important;
+            }
+        }
+    }
+}
+
+.nav-kanban {
+    .nav-link {
+        @include transition(border-color .2s ease-in-out);
+
+        border-bottom: $nav-border-width solid transparent;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        padding-left: 0;
+        padding-right: 0;
+
+        @include hover-focus {
+            border-color: $nav-link-hover-border-color;
+        }
+
+        &.disabled {
+            color: $nav-link-disabled-color;
+            background-color: transparent;
+            border-color: transparent;
+        }
+    }
+
+    .nav-link.active,
+    .nav-item.show .nav-link {
+        color: $nav-link-active-color;
+        border-color: $nav-link-active-border-color;
+    }
+}

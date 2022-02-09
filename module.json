@@ -1,0 +1,18 @@
+{
+    "id": "kanban",
+    "name": "Kanban",
+    "description": "Kanban module for humhub",
+    "keywords": ["kanban", "todo", "tasks", "planner"],
+    "version": "1.0.0",
+    "homepage": "https://github.com/simialbu/kanban",
+    "humhub": {
+        "minVersion": "1.7"
+    },
+    "authors": [
+        {
+            "name": "simialbi",
+            "email": "simi.albi@outlook.com",
+            "role": "Developer"
+        }
+    ]
+}

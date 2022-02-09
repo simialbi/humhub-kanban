@@ -1,0 +1,34 @@
+{
+    "name": "simialbi/humhub-kanban",
+    "description": "Kanban board module for humhub",
+    "keywords": ["kanban", "todo", "tasks", "planner"],
+    "license": "",
+    "authors": [
+        {
+            "name": "simialbi",
+            "email": "simi.albi@outlook.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "arogachev/yii2-sortable": "^0.1.6",
+        "bower-asset/fullcalendar": "4.2.*",
+        "npm-asset/bootstrap": "^4.3",
+        "npm-asset/highlight.js": "^9.18.1",
+        "npm-asset/swiper": "^6.3.5",
+        "simialbi/yii2-widget-hideseek": "^1.3.1",
+        "simialbi/yii2-summernote": "^1.2.0",
+        "simshaun/recurr": "^5.0.0"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    }
+}
